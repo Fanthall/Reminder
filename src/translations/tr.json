@@ -1,0 +1,22 @@
+{
+    "home": "Ana Sayfa",
+    "new": "Yeni",
+    "notificationList": "Bildirim Listeniz",
+    "add": "Bildirim Ekleme",
+    "notificationTitle": "Başlık",
+    "notificationBody": "İçerik",
+    "repeatTime": "Tekrar süresi",
+    "firsSendTme": "Günün ilk mesajı",
+    "birthdayReminder": "Doğum Günü Hatırlatıcı",
+    "reminder": "Hatırlatıcı",
+    "waterReminder": "Su İçme Hatırlatıcısı",
+    "hospitalReminder": "Hastane Randevu Hatırlatıcısı",
+    "birthdayDate": "Doğum günü",
+    "name": "Adı Soyadı",
+    "dateOfTheBirth": "Doğum Tarihi",
+    "save": "Kaydet",
+    "mustSetOwnerBirthday":"Uygulamaya kendi doğum tarihinizi girmeniz gerekmektedir. İlk kayıt işlemi sizin bilgileriniz olmalı.",
+    "ownerBirthdayTitle":"Sizin Doğum Tarihinizi Bilmiyorum 😊",
+    "yourBirthday":"Sizin Doğum Tarihiniz",
+    "beforeRemind":"İlk Hatırlatma"
+}
