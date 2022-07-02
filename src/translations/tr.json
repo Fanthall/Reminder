@@ -26,5 +26,9 @@
     "waterSize":"Su miktarı",
     "cupSize":"Bir bardak su miktarı",
     "drankValue":"İçilen miktar",
-    "remindMe":"Hatırlat"
+    "remindMe":"Hatırlat",
+    "activeAll":"Hatırlat",
+    "disableAll":"Hatırlatma",
+    "all":"Hepsini",
+    "waterWarning":"Tüm hatırlatmalar aktif değil. Lütfen istemediğiniz saatleri kapatmak yerine bardak ml değerini yükseltin ya da total su içme miktarınızı düşürün."
 }

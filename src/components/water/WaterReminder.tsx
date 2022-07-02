@@ -32,10 +32,11 @@ const WaterReminder = () => {
     const [refresh, setRefresh] = useState<boolean>(false);
     const [newSave, seNewSave] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(true);
+    const [remindAll, setRemindAll] = useState<boolean>(true);
     const [date, setDate] = useState<Date>(new Date());
     const [startHourPickerOpen, setStartHourPickerOpen] = useState<boolean>(false);
     const [endHourPickerOpen, setEndHourPickerOpen] = useState<boolean>(false);
-    const [remindCheckbox, setRemindCheckbox] = useState<boolean>(false);
+    const [waterRemindWarning, setWaterRemindWarning] = useState<boolean>(false);
     const [startHour, setStartHour] = useState<string>(language.render("choseClock"));
     const [endHour, setEndHour] = useState<string>(language.render("choseClock"));
     const [maxWater, setMaxWater] = useState<string>("");
@@ -44,17 +45,26 @@ const WaterReminder = () => {
     const [cupSize, setCupSize] = useState<string>("");
     const [progressValue, setProgressValue] = useState<number>();
     const [completedValue, setCompletedValue] = useState<number>();
-    const [reminderList, setReminderList] = useState<WaterReminderList[]>();
+    const [reminderList, setReminderList] = useState<WaterReminderList[]>([]);
+    const [localStorageData, setLocalStorageData] = useState<StoredWaterReminder>({});
+
     useEffect(() => {
         setLoading(true);
         const getData = async () => {
             const data = await getWaterReminderList();
             if (data) {
+                setLocalStorageData(data);
+                for (let i = 0; i < data.reminderList.length; i++) {
+                    if (!data.reminderList[i].remindMe) {
+                        setWaterRemindWarning(true);
+                        setRemindAll(false);
+                        break;
+                    }
+                }
                 setStartHour(data.startHour);
                 setEndHour(data.endHour);
                 setMaxWater(data.dailyTotalSize.toString());
                 setCupSize(data.cupSize.toString());
-                setRemindCheckbox(data.remindMe);
                 setReminderList(data.reminderList);
                 setCompletedValue(data.completedSize);
                 setProgressValue(Math.round((((data.completedSize * 100) / data.dailyTotalSize) / 100) * 100) / 100);
@@ -65,7 +75,7 @@ const WaterReminder = () => {
                 setEndHour(language.render("choseClock"));
                 setMaxWater("");
                 setCupSize("");
-                setRemindCheckbox(false);
+                setWaterRemindWarning(false);
                 setReminderList([]);
                 setProgressValue(0);
                 setRefresh(!refresh);
@@ -104,7 +114,11 @@ const WaterReminder = () => {
             time.setMinutes(0);
             time.setSeconds(0);
             time.setMilliseconds(0);
-            list.push({ id: i.toString(), time: new Date(((time.getTime() + start) + (differenceOfNotifications * i))) });
+            list.push({
+                id: i.toString(),
+                time: new Date(((time.getTime() + start) + (differenceOfNotifications * i))),
+                remindMe: true
+            });
         }
         const waterReminderList: StoredWaterReminder = {
             dailyTotalSize: parseInt(maxWater),
@@ -113,7 +127,6 @@ const WaterReminder = () => {
             cupSize: parseInt(cupSize),
             completedSize: 0,
             reminderList: list,
-            remindMe: remindCheckbox
         };
         await saveWaterReminderList(waterReminderList);
         seNewSave(!newSave);
@@ -122,7 +135,7 @@ const WaterReminder = () => {
 
     const renderSetup = () => {
         return (
-            <View style={[styles.addPanel, { height: 250 }]} key="addPanel">
+            <View style={[styles.addPanel, { height: (waterRemindWarning ? 275 : 225) }]} key="addPanel">
                 <View style={{ flexDirection: 'row', justifyContent: "space-between" }}>
                     <View style={{ marginTop: 10, width: "48%" }}>
                         <Text>{language.render("firstWaterNotification")}</Text>
@@ -245,23 +258,6 @@ const WaterReminder = () => {
 
                     </View>
                 </View>
-                <View style={{ flexDirection: 'row', justifyContent: "space-between", width: "100%", height: "20%" }}>
-                    <View style={{ flexDirection: 'row', justifyContent: "center", alignItems: "center", width: "100%" }}>
-                        <View style={{ flexDirection: 'row' }}>
-                            <FtCheckBox selected={remindCheckbox}
-                                onPress={() => setRemindCheckbox(!remindCheckbox)}
-                                style={{ alignSelf: 'flex-start' }}
-                                iconSelected="notifications-outline"
-                                iconTypeSelected='Ionicons'
-                                iconDeselected="notifications-off-outline"
-                                iconTypeDeselected='Ionicons'
-                                iconColorSelected={AppColors.orange}
-                                iconColorDeselected={AppColors.black}
-                            />
-                            <Text>{language.render("remindMe")}</Text>
-                        </View>
-                    </View>
-                </View>
                 <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 10 }}>
                     <TouchableOpacity
                         style={styles.save}
@@ -271,6 +267,10 @@ const WaterReminder = () => {
                         <Text style={{ color: AppColors.white }}>{language.render("save")}</Text>
                     </TouchableOpacity>
                 </View>
+                {
+                    waterRemindWarning &&
+                    <Text style={{ color: AppColors.red }}>{language.render("waterWarning")}</Text>
+                }
             </View >
         );
     }
@@ -278,27 +278,96 @@ const WaterReminder = () => {
     const renderResult = () => {
         return (
             <View style={{
-                flexDirection: 'column',
-                justifyContent: 'center',
+                flexDirection: 'row',
+                justifyContent: 'space-between',
                 alignItems: "center",
                 marginTop: 10,
             }}>
-                <Text>{language.render("drankValue")}</Text>
-                <Progress.Circle size={60} showsText={true} thickness={4} progress={progressValue} animated={true} formatText={() => {
-                    if (progressValue)
-                        return `${progressValue * 100}%`;
-                    return "0%";
-                }} />
-                <Text>{completedValue + "/" + maxWater + " ml"}</Text>
-            </View>
+                <View style={{ width: "30%" }}></View>
+                <View style={{
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    alignItems: "center",
+                    width: "40%",
+                    marginTop: 10,
+                }}>
+                    <Text>{language.render("drankValue")}</Text>
+                    <Progress.Circle size={60} showsText={true} thickness={4} progress={progressValue} animated={true} formatText={() => {
+                        if (progressValue)
+                            return `${progressValue * 100}%`;
+                        return "0%";
+                    }} />
+                    <Text>{completedValue + "/" + maxWater + " ml"}</Text>
+                </View>
+                <View style={{
+                    width: "30%",
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    alignItems: "center",
+                }}>
+                    <FtCheckBox selected={remindAll}
+                        onPress={async () => {
+                            reminderList.map((item)=>{
+                                item.remindMe=!remindAll;
+                            })
+                            localStorageData.reminderList = reminderList;
+                            await saveWaterReminderList(localStorageData);                         
+                            setReminderList(reminderList);
+                            setWaterRemindWarning(!waterRemindWarning);
+                            setLocalStorageData(localStorageData);
+                            setRemindAll(!remindAll);
+                            setRefresh(!refresh);
+                        }}
+                        style={{ alignSelf: 'center', justifyContent: "center" }}
+                        iconSelected="notifications-outline"
+                        iconTypeSelected='Ionicons'
+                        iconDeselected="notifications-off-outline"
+                        iconTypeDeselected='Ionicons'
+                        iconColorSelected={AppColors.orange}
+                        iconColorDeselected={AppColors.black}
+                    />
+                </View>
+            </View >
         )
     }
 
     const renderList = ({ item, index }) => {
-        return (//TODO: Liste görünümü düzenlenecek.
-            <View style={{ flexDirection: "row", justifyContent: "center" }}>
-                <Text style={{ marginRight: 15 }}>{(parseInt(item.id) + 1).toString()}</Text>
+        return (
+            <View style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                alignItems: "center",
+                backgroundColor: AppColors.grayUltraLight,
+                height: 40,
+                marginTop: 5,
+                padding: 5,
+                borderRadius: 10
+            }}>
                 <Text>{format(new Date(item.time), 'HH:mm ', { locale: tr })}</Text>
+                <FtCheckBox selected={item.remindMe}
+                    onPress={async () => {
+                        reminderList[index].remindMe = !reminderList[index].remindMe;
+                        setWaterRemindWarning(false);
+                        for (let i = 0; i < reminderList.length; i++) {
+                            if (!reminderList[i].remindMe) {
+                                setWaterRemindWarning(true);
+                                break;
+                            }
+                        }
+                        localStorageData.reminderList = reminderList;
+                        await saveWaterReminderList(localStorageData);
+                        setReminderList(reminderList);
+                        setLocalStorageData(localStorageData);
+                        setRefresh(!refresh);
+                    }}
+                    style={{ alignSelf: 'center', justifyContent: "center" }}
+                    iconSelected="notifications-outline"
+                    iconTypeSelected='Ionicons'
+                    iconDeselected="notifications-off-outline"
+                    iconTypeDeselected='Ionicons'
+                    iconColorSelected={AppColors.orange}
+                    iconColorDeselected={AppColors.black}
+                />
             </View>
         );
     }

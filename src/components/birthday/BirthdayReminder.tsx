@@ -311,7 +311,7 @@ const BirthdayReminder = () => {
 
             <ScrollView style={styles.scrollView}>
                 {renderAddPanel()}
-                {
+                {//TODO: buradaki flatlist virtual hatası çözülecek
                     <ModalMessage
                         modalVisible={ownerWarning}
                         bodyText={language.render("mustSetOwnerBirthday")}

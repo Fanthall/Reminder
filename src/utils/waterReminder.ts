@@ -8,12 +8,12 @@ export interface StoredWaterReminder {
     cupSize: number;
     completedSize: number;
     reminderList: WaterReminderList[];
-    remindMe: boolean;
 };
 
 export interface WaterReminderList {
     id: string;
     time: Date;
+    remindMe: boolean;
 };
 
 export const saveWaterReminderList = async (val: StoredWaterReminder) => {
