@@ -18,5 +18,17 @@
     "mustSetOwnerBirthday":"Uygulamaya kendi doğum tarihinizi girmeniz gerekmektedir. İlk kayıt işlemi sizin bilgileriniz olmalı.",
     "ownerBirthdayTitle":"Sizin Doğum Tarihinizi Bilmiyorum 😊",
     "yourBirthday":"Sizin Doğum Tarihiniz",
-    "beforeRemind":"İlk Hatırlatma"
+    "beforeRemind":"İlk Hatırlatma",
+    "firstWaterNotification":"Başlama Saati",
+    "lastWaterNotification":"Bitiş Saati",
+    "choseClock":"Saat Seçin",
+    "maxWater":"Gün içinde içilecek miktar",
+    "waterSize":"Su miktarı",
+    "cupSize":"Bir bardak su miktarı",
+    "drankValue":"İçilen miktar",
+    "remindMe":"Hatırlat",
+    "activeAll":"Hatırlat",
+    "disableAll":"Hatırlatma",
+    "all":"Hepsini",
+    "waterWarning":"Tüm hatırlatmalar aktif değil. Lütfen istemediğiniz saatleri kapatmak yerine bardak ml değerini yükseltin ya da total su içme miktarınızı düşürün."
 }

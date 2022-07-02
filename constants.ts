@@ -2,6 +2,7 @@ export default {
     storeKeys: {
         birthReminderList: "birthReminderList",
         birthReminderOwner: "birthReminderOwner",
+        waterReminder:"waterReminder",
     },
     routes: {
         home: 'home',
