@@ -319,7 +319,7 @@ const BirthdayReminder = () => {
                             setOwnerWarning(false);
                             setSaveOwnerWarning(true);
                         }} />
-                }
+                }//TODO: buradaki flatlist virtual hatası çözülecek
                 <FlatList
                     style={{ backgroundColor: "transparent" }}
                     data={birthdayReminderList}
