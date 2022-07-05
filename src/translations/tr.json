@@ -30,5 +30,11 @@
     "activeAll":"Hatırlat",
     "disableAll":"Hatırlatma",
     "all":"Hepsini",
-    "waterWarning":"Tüm hatırlatmalar aktif değil. Lütfen istemediğiniz saatleri kapatmak yerine bardak ml değerini yükseltin ya da total su içme miktarınızı düşürün."
+    "remindDate":"Hatırlatma zamanı:",
+    "notificationHeaderPlaceHolder":"Bildirim başlığı giriniz...",
+    "notificationBodyPlaceHolder":"Bildirim içeriği giriniz...",
+    "waterWarning":"Tüm hatırlatmalar aktif değil. Lütfen istemediğiniz saatleri kapatmak yerine bardak ml değerini yükseltin ya da total su içme miktarınızı düşürün.",
+    "repeatType":"Tekrar türü",
+    "repeatTimePeriod":"Tekrar aralığı"
+
 }
