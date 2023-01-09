@@ -62,7 +62,6 @@ ios/Podfile.lock
 
 # Bundle artifact
 *.jsbundle
-package-lock.json
 
 #local history extention file path
 .history
